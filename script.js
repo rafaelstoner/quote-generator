@@ -1,41 +1,38 @@
-
-const API_BASE_URL = 'http://api.forismatic.com/api/1.0/';
-const API_METHOD = 'getQuote';
-const API_LANG = 'en';
-const API_FORMAT = 'json';
+const API_URL = "https://type.fit/api/quotes";
 
 async function getQuote() {
-
-    const apiURL = `${API_BASE_URL}?method=${API_METHOD}&lang=${API_LANG}&format=${API_FORMAT}`;
-
-    try {
-        const response = await fetch(apiURL);
-
-        if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
-        }
-
-        const data = await response.json();
-        handleQuoteData(data);
-    } catch (error) {
-        handleQuoteError(error);
+  try {
+    const response = await fetch(API_URL);
+    
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
     }
+    
+    const data = await response.json();
+    const randomIndex = Math.floor(Math.random() * data.length);
+    const randomQuote = data[randomIndex];
+    
+    handleQuoteData(randomQuote);
+  } catch (error) {
+    handleQuoteError(error);
+  }
 }
 
-function handleQuoteData(data) {
-    console.log(data);
-    // Faça algo com os dados da resposta da API
+function handleQuoteData({ text, author }) {
+  // Cases where author is 'type.fit', replace with 'unkown'
+  if (author === "type.fit" ) {
+    author = "unknown";
+  } else {
+    // If author name ends with 'type.fit', remove it
+    author = author.replace(", type.fit", "");
+  }
+
+  console.log(`Quote: ${text}`);
+  console.log(`Author: ${author}`);
 }
 
 function handleQuoteError(error) {
-    console.error('Erro ao obter a quote:', error);
-    console.log(error);
+  console.error('Erro ao obter a quote:', error);
 }
 
 getQuote();
-
-
-
-
-
-
