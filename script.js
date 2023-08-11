@@ -2,6 +2,7 @@
 quoteText = document.getElementById('quote');
 quoteAuthor = document.getElementById('author');
 newQuoteBtn = document.getElementById('new-quote');
+tweeterBtn = document.getElementById('twitter');
 
 const API_URL = "https://api.quotable.io/random";
 
@@ -43,8 +44,18 @@ function handleQuoteError(error) {
   console.error('Erro ao obter a quote:', error);
 }
 
-// Add Listeners
+function tweet() {
+  const twitterUrl = 'https://twitter.com/intent/tweet';
+  const quote = quoteText.innerText;
+  const author = quoteAuthor.innerText;
+  const tweetEndpoint = `${twitterUrl}/?text=${quote} - ${author}`;
+  window.open(tweetEndpoint, '_blank');
+}
+
+// Listeners
 newQuoteBtn.addEventListener('click', getQuote);
+tweeterBtn.addEventListener('click', tweet);
+
 
 //On load
 getQuote();
