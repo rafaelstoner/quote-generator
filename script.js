@@ -1,4 +1,10 @@
-const API_URL = "https://type.fit/api/quotes";
+
+quoteText = document.getElementById('quote');
+quoteAuthor = document.getElementById('author');
+newQuoteBtn = document.getElementById('new-quote');
+
+const API_URL = "https://api.quotable.io/random";
+
 
 async function getQuote() {
   try {
@@ -9,30 +15,36 @@ async function getQuote() {
     }
     
     const data = await response.json();
-    const randomIndex = Math.floor(Math.random() * data.length);
-    const randomQuote = data[randomIndex];
-    
-    handleQuoteData(randomQuote);
+
+    handleQuoteData(data);
   } catch (error) {
     handleQuoteError(error);
   }
 }
 
-function handleQuoteData({ text, author }) {
-  // Cases where author is 'type.fit', replace with 'unkown'
-  if (author === "type.fit" ) {
-    author = "unknown";
-  } else {
-    // If author name ends with 'type.fit', remove it
-    author = author.replace(", type.fit", "");
-  }
+function handleQuoteData(data) {
+  //If author is empty, then repace it with unknown
 
-  console.log(`Quote: ${text}`);
-  console.log(`Author: ${author}`);
+  if (data.author === "") {
+    quoteAuthor.innerText = "unknown";
+  } 
+  quoteAuthor.innerText = data.author;
+
+  if (data.content.length > 150) {
+    quoteText.classList.add('long-quote');
+  } else {
+    quoteText.classList.remove('long-quote');
+
+  }
+  quoteText.innerText = data.content;
 }
 
 function handleQuoteError(error) {
   console.error('Erro ao obter a quote:', error);
 }
 
+// Add Listeners
+newQuoteBtn.addEventListener('click', getQuote);
+
+//On load
 getQuote();
