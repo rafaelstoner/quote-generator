@@ -8,14 +8,12 @@ loader = document.getElementById('loader');
 
 const API_URL = "https://api.quotable.io/random";
 
-//Show Loader
-function showLoader() {
+function showLoadingSpinner() {
   loader.hidden = false;
   quoteContainer.hidden = true;
 }
 
-//Hide Loader 
-function hideLoader() {
+function hideLoadingSpinner() {
   if (!loader.hidden) {
     loader.hidden = true;
     quoteContainer.hidden = false;
@@ -24,7 +22,7 @@ function hideLoader() {
 }
 
 async function getQuote() {
-  showLoader();
+  showLoadingSpinner();
   try {
     const response = await fetch(API_URL);
 
@@ -35,7 +33,7 @@ async function getQuote() {
     const data = await response.json();
 
     handleQuoteData(data);
-    hideLoader();
+    hideLoadingSpinner();
   } catch (error) {
     handleQuoteError(error);
   }
