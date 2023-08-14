@@ -47,7 +47,7 @@ body {
     justify-content: space-between;
     margin-top: 10px;
 }
-#threads,#linkedin {
+#threads, #linkedin {
   display: none;
 }
 
