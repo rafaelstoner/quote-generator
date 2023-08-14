@@ -1,23 +1,41 @@
 
+quoteContainer = document.getElementById('quote-container');
 quoteText = document.getElementById('quote');
 quoteAuthor = document.getElementById('author');
 newQuoteBtn = document.getElementById('new-quote');
 tweeterBtn = document.getElementById('twitter');
+loader = document.getElementById('loader');
 
 const API_URL = "https://api.quotable.io/random";
 
+//Show Loader
+function showLoader() {
+  loader.hidden = false;
+  quoteContainer.hidden = true;
+}
+
+//Hide Loader 
+function hideLoader() {
+  if (!loader.hidden) {
+    loader.hidden = true;
+    quoteContainer.hidden = false;
+
+  }
+}
 
 async function getQuote() {
+  showLoader();
   try {
     const response = await fetch(API_URL);
-    
+
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`);
     }
-    
+
     const data = await response.json();
 
     handleQuoteData(data);
+    hideLoader();
   } catch (error) {
     handleQuoteError(error);
   }
@@ -28,7 +46,7 @@ function handleQuoteData(data) {
 
   if (data.author === "") {
     quoteAuthor.innerText = "unknown";
-  } 
+  }
   quoteAuthor.innerText = data.author;
 
   if (data.content.length > 150) {
@@ -59,3 +77,4 @@ tweeterBtn.addEventListener('click', tweet);
 
 //On load
 getQuote();
+
